@@ -1,24 +1,35 @@
 let AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 exports.handler = function (event, context, callback) {
-	s3.putObject({
-		"Body": "testhiru",
-		"Bucket": "hiru.new",
-		"Key": "hirutest"
-	})
-		.promise()
+
+	s3.listObjects({
+		'Bucket': 'hiru.new.',
+		'MaxKeys': 10,
+		'Prefix': 'qwe'
+	}).promise()
 		.then(data => {
 			console.log(data);           // successful response
 			/*
 			data = {
-				ETag: "\\"6805f2cfc46c0f04559748bb039d69ae\\"", 
-				VersionId: "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
-			}
+			 Contents: [
+				{
+				   ETag: "\\"70ee1738b6b21e2c8a43f3a5ab0eee71\\"",
+				   Key: "example1.jpg",
+				   LastModified: <Date Representation>,
+				   Owner: {
+					  DisplayName: "myname",
+					  ID: "12345example25102679df27bb0ae12b3f85be6f290b936c4393484be31bebcc"
+				   },
+				   Size: 11,
+				   StorageClass: "STANDARD"
+				},
+				{...}
 			*/
 		})
 		.catch(err => {
 			console.log(err, err.stack); // an error occurred
 		});
+
 
 
 	callback(null, 'Successfully executed');
